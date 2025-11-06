@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
-@RequestMapping("/kafkaapi/members")
+@RequestMapping("/api/members")
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
@@ -35,7 +35,7 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getMember(id));
     }
 
-    @GetMapping("/status/{status}")
+    @GetMapping("/status")
     public ResponseEntity<List<MemberResponseDto>> getMemberList(@RequestParam Status status) {
         List<MemberResponseDto> memberResponseDtos = memberService.getMemberList(status);
         return ResponseEntity.ok(memberResponseDtos);
@@ -43,6 +43,7 @@ public class MemberController {
     
     @PostMapping()
     public ResponseEntity<MemberResponseDto> addMember(@RequestBody MemberCreateRequestDto memberCreateRequestDto) {
+        System.out.println(memberCreateRequestDto.getName());
         MemberResponseDto memberResponseDto = memberService.add(memberCreateRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(memberResponseDto);
     }
