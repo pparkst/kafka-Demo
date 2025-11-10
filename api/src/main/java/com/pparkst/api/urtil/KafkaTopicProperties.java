@@ -12,5 +12,6 @@ import lombok.Setter;
 @ConfigurationProperties(prefix = "kafka.topics")
 public class KafkaTopicProperties {
     
-    private String memberAdd;
+    private String test;
+    private String membersAdd;
 }

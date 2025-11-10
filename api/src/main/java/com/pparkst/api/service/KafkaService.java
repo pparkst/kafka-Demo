@@ -1,8 +1,9 @@
 package com.pparkst.api.service;
 
 import com.pparkst.api.urtil.KafkaTopicProperties;
-import org.springframework.stereotype.Service;
 
+import org.springframework.stereotype.Service;
+import com.pparkst.common.MemberCreateRequestKafkaDto;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.kafka.core.KafkaTemplate;
@@ -16,10 +17,22 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class KafkaService<T> {
     private final KafkaTemplate<String, T> kafkaTemplate;
-    private final KafkaTopicProperties KafkaTopicProperties;
+    private final KafkaTopicProperties kafkaTopicProperties;
 
     public CompletableFuture<SendResult<String, T>> sendMessage(T data) {
-        log.info("Kafka Producer - Topic : '{}' / messqge : '{}", KafkaTopicProperties.getMemberAdd(), data.toString());
-        return kafkaTemplate.send(KafkaTopicProperties.getMemberAdd(), data);
+        String topicName;
+
+        switch (data) {
+            case MemberCreateRequestKafkaDto memberCreateRequestKafkaDto -> {
+                topicName = kafkaTopicProperties.getMembersAdd();
+            }
+                
+            default -> {
+                topicName = kafkaTopicProperties.getTest();
+            }
+        }
+
+        log.info("Kafka Producer - Topic : '{}' / messqge : '{}", topicName, data.toString());
+        return kafkaTemplate.send(topicName, data);
     }
 }

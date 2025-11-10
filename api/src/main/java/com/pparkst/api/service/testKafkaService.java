@@ -16,6 +16,7 @@ public class testKafkaService {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private static final String TOPIC_NAME = "my-topic";
 
+
     public CompletableFuture<SendResult<String, String>> sendMessage(String message) {
         log.info("Kafka Producer - Topic : '{}' / message : '{}'", TOPIC_NAME, message);
         return kafkaTemplate.send(TOPIC_NAME, message);
