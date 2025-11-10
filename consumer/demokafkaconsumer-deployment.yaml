@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: demokafkaconsumer-deployment
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demokafka-consumer
+  template:
+    metadata:
+      labels:
+        app: demokafka-consumer
+    spec:
+      containers:
+        - name: demokafkaconsumer-containers
+          image: demokafka-consumer:0.8
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_URL
+              value: "jdbc:mysql://host.docker.internal:3306/sys?serverTimezone=Asia/Seoul&characterEncoding=UTF-8"
+            - name: DB_PASSWORD
+              value: "dev0723!"
