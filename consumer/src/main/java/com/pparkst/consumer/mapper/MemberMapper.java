@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import com.pparkst.consumer.domain.Member;
-import com.pparkst.consumer.dto.MemberCreateRequestKafkaDto;
+import com.pparkst.common.MemberCreateRequestKafkaDto;
 
 @Mapper(componentModel = "spring")
 public interface MemberMapper {

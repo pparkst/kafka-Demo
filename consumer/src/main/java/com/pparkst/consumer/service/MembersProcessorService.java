@@ -1,9 +1,10 @@
 package com.pparkst.consumer.service;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import com.pparkst.consumer.domain.Member;
-import com.pparkst.consumer.dto.MemberCreateRequestKafkaDto;
+import com.pparkst.common.MemberCreateRequestKafkaDto;
 import com.pparkst.consumer.mapper.MemberMapper;
 import com.pparkst.consumer.repository.MembersRepository;
 
@@ -17,12 +18,15 @@ public class MembersProcessorService {
 
     public boolean add(MemberCreateRequestKafkaDto memberCreateRequestKafkaDto) {
         Member member = memberMapper.toEntity(memberCreateRequestKafkaDto);
+        member.init();
 
         if(membersRepository.findByAccount(member.getAccount()).isPresent()) {
-            throw new IllegalStateException("이미 존재하는 계정입니다.");
+            throw new DuplicateKeyException("이미 존재하는 계정입니다.");
         }
 
-        if(membersRepository.save(member) == null) {
+        member = membersRepository.save(member);        
+
+        if(member == null || member.getId() == null) {
             return false;
         } else {
             return true;
